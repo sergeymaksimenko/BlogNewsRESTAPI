@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
+
+	<!-- Imported resources for cxf -->
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-jaxrs-binding.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	
+	<!-- Imported bean for dao -->
+	<import resource="classpath:META-INF/spring/dao.xml"/>
+
+	<bean id="postService" class="rest.PostServiceJSON">
+		<property name="postDAO" ref="postDAO"/>
+	</bean>
+	<bean id="commentService" class="rest.CommentServiceJSON">
+		<property name="commentDAO" ref="commentDAO"/>
+	</bean>
+	<bean id="authService" class="rest.Authentication">
+		<property name="authenticationDAO" ref="authenticationDAO"/>
+	</bean>
+
+
+
+	<bean id="preInvokeHandler" class="rest.PreInvokeHandler" />
+	<bean id="customExceptionMapper" class="rest.CustomExceptionMapper" />
+
+
+	<jaxrs:server id="restContainer" address="/post">
+		<jaxrs:serviceBeans>
+			<ref bean="postService" />
+		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+
+			<ref bean="preInvokeHandler" />
+			<ref bean="customExceptionMapper" />
+		</jaxrs:providers>
+	</jaxrs:server>
+	<jaxrs:server id="restContainerComment" address="/comment">
+		<jaxrs:serviceBeans>
+			<ref bean="commentService" />
+		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+
+			<ref bean="preInvokeHandler" />
+			<ref bean="customExceptionMapper" />
+		</jaxrs:providers>
+	</jaxrs:server>
+	<jaxrs:server id="restContainerAuthentication" address="/authentication">
+		<jaxrs:serviceBeans>
+			<ref bean="authService" />
+		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+
+		</jaxrs:providers>
+	</jaxrs:server>
+
+
+</beans>
