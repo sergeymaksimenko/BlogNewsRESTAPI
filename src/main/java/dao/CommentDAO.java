@@ -82,7 +82,7 @@ public class CommentDAO implements ICommentDAO {
         if (comment != null && comment.getId() != null) {
             Comment oldComment = getCommentById(id);
             String sqlUpdate = String
-                    .format("UPDATE comment SET body = %s, userIdCreator = %s, dateCreated = %s,idPost = %s WHERE id = %s",
+                    .format("UPDATE comment SET body = %s, userCreatorId = %s, dateCreated = %s,idPost = %s WHERE id = %s",
                             "'" + comment.getBody() + "'",
                             "'" + comment.getUserCreatorId() + "'", ((comment.getDateCreated() != null) ? "'" + comment.getDateCreated() + "'" : "now()"), "'" + comment.getIdPost() + "'",
                             "'" + id + "'");
@@ -115,7 +115,7 @@ public class CommentDAO implements ICommentDAO {
                             Comment comment = new Comment();
                             comment.setId(rs.getInt("id"));
                             comment.setIdPost(rs.getInt("idPost"));
-                            comment.setUserCreatorId(rs.getInt("userIdCreator"));
+                            comment.setUserCreatorId(rs.getInt("userCreatorId"));
                             comment.setBody(rs.getString("body"));
                             comment.setDateCreated(rs.getDate("dateCreated"));
                             return comment;
