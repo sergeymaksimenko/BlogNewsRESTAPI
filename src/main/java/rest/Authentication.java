@@ -31,16 +31,13 @@ public class Authentication {
 
     @POST
     @Produces("application/json")
-    //@Consumes(MediaType.APPLICATION_JSON)
     @Consumes("application/x-www-form-urlencoded")
     public Response authenticateUser(@FormParam("username") String username,
                                      @FormParam("password") String password) {
         try {
-            System.out.println(username + " " + password);
             Integer userId = authenticationDAO.authenticate(username, password);
-            String token = issueToken(username);
+            String token = issueToken();
             authenticationDAO.setToken(userId, token);
-
             return Response.ok(token).build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,13 +46,10 @@ public class Authentication {
     }
 
 
-    private String issueToken(String username) {
+    private String issueToken() {
         Random random = new SecureRandom();
         String token = new BigInteger(130, random).toString(32);
         return token;
     }
 
-    private String getHeaderVersion() {
-        return requestHeaders.getRequestHeader("version").get(0);
-    }
 }

@@ -67,9 +67,6 @@ public class AuthenticationDAO {
     }
 
     public Integer getRoleFromToken(String token) {
-
-        System.out.println(templAuth.getDataSource().toString());
-
         return templAuth.queryForInt("SELECT idrole FROM users,token WHERE (token.token = '" + token + "' && token.userId = users.id)");
     }
 

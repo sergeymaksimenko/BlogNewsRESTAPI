@@ -15,8 +15,6 @@ import java.util.Map;
 
 public class PostDAO implements IPostDAO {
 
-    Map<Integer, Post> profsMap = new HashMap<Integer, Post>();
-
     DataSource datasource;
 
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -29,7 +27,6 @@ public class PostDAO implements IPostDAO {
         this.insertPost = new SimpleJdbcInsert(dataSource)
                 .withTableName("post");
     }
-
 
 
     @Override
@@ -55,7 +52,6 @@ public class PostDAO implements IPostDAO {
 
 
     public Post getPost(Integer id) {
-        System.out.println("id=" + id);
         if ((templPost
                 .queryForInt("Select count(1) FROM post WHERE id = '" + id
                         + "'")) > 0) {
@@ -83,13 +79,11 @@ public class PostDAO implements IPostDAO {
     public Post updatePost(Post post) {
         if (post != null && post.getId() != null) {
             Post oldPost = getPost(post.getId());
-            System.out.println(oldPost);
             String sqlUpdate = String
                     .format("UPDATE post SET body = %s, userCreatorId = %s, dateCreated = %s WHERE id = %s",
                             "'" + post.getBody() + "'",
                             "'" + post.getUserCreatorId() + "'", ((post.getDateCreated() != null) ? "'" + post.getDateCreated() + "'" : "now()"),
                             "'" + post.getId() + "'");
-            System.out.println(sqlUpdate);
             templPost.update(sqlUpdate);
             return oldPost;
         } else {
@@ -99,11 +93,11 @@ public class PostDAO implements IPostDAO {
 
     @Override
     public boolean removePost(Integer id) {
-            if (templPost
-                    .update("DELETE FROM post WHERE id = '" + id + "'") > 0) {
-                return true;
-            } else {
-                return false;
-            }
+        if (templPost
+                .update("DELETE FROM post WHERE id = '" + id + "'") > 0) {
+            return true;
+        } else {
+            return false;
         }
+    }
 }

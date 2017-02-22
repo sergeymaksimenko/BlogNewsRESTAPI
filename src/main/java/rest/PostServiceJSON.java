@@ -60,7 +60,6 @@ public class PostServiceJSON {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createPost(Post post) {
-        System.out.println("POST");
         Post crePost = postDAO.createPost(post);
         if (crePost != null) {
             return ResponseCreator.success(getHeaderVersion(), crePost);
@@ -73,7 +72,6 @@ public class PostServiceJSON {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updatePost(Post post) {
-
         Post updPost = postDAO.updatePost(post);
         if (updPost != null) {
             return ResponseCreator.success(getHeaderVersion(), updPost);
@@ -84,27 +82,12 @@ public class PostServiceJSON {
     }
 
     @DELETE
-    //@RequestMapping(method = RequestMethod.POST,value ="/post/{id}" )
     @Path("/{id}")
-    public Response removeCustomer(@PathParam("id") Integer id) {
+    public Response removePost(@PathParam("id") Integer id) {
         if (postDAO.removePost(id)) {
             return ResponseCreator.success(getHeaderVersion(), "removed");
         } else {
             return ResponseCreator.success(getHeaderVersion(), "no such id");
         }
     }
-    /*@GET
-	@Path(value = "/{id}/comment")
-	public Response getComments(@PathParam("id") Integer id) {
-		List<Comment> comments = commentDAO.getComments(id);
-		if (comments != null) {
-			GenericEntity<List<Comment>> list = new GenericEntity<List<Comment>>(comments){};
-			return Response.ok(list).build();
-		} else {
-			return ResponseCreator.error(404, rest.exceptions.Error.NOT_FOUND.getCode(),
-					getHeaderVersion());
-		}
-	}
-*/
-
 }

@@ -17,12 +17,4 @@ public enum Role {
         return id;
     }
 
-    Role getRole(Integer id) {
-        Role choosenRole = null;
-        for (Role role : values()) {
-            if (id == role.getId())
-                choosenRole = role;
-        }
-        return choosenRole;
-    }
 }

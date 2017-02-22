@@ -7,7 +7,6 @@ import java.util.Date;
 public class Post {
     private Integer id;
     private String body;
-    //private List<Comment> comments;
     private Integer userCreatorId;
     private Date dateCreated;
 

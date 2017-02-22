@@ -35,7 +35,6 @@ public class CommentServiceJSON {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createComment(Comment comment) {
-        System.out.println("POST-Comment");
         Comment creComment = commentDAO.createComment(comment);
         if (creComment != null) {
             return ResponseCreator.success(getHeaderVersion(), creComment);
@@ -48,10 +47,8 @@ public class CommentServiceJSON {
     @GET
     @Path(value = "/{id}")
     public Response getComments(@PathParam("id") Integer id) {
-        System.out.println("comment " + id);
         List<Comment> comments = commentDAO.getComments(id);
         if (comments != null) {
-            System.out.println(comments);
             GenericEntity<List<Comment>> list = new GenericEntity<List<Comment>>(comments) {
             };
             return Response.ok(list).build();
@@ -64,13 +61,23 @@ public class CommentServiceJSON {
     @PUT
     @Path(value = "/{idc}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updatePost(@PathParam("idc") Integer idc, Comment comment) {
+    public Response updateComment(@PathParam("idc") Integer idc, Comment comment) {
         Comment updComment = commentDAO.updateComment(idc, comment);
         if (updComment != null) {
             return ResponseCreator.success(getHeaderVersion(), updComment);
         } else {
             return ResponseCreator.error(500, Error.SERVER_ERROR.getCode(),
                     getHeaderVersion());
+        }
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response removeComment(@PathParam("id") Integer id) {
+        if (commentDAO.removeComment(id)) {
+            return ResponseCreator.success(getHeaderVersion(), "removed");
+        } else {
+            return ResponseCreator.success(getHeaderVersion(), "no such id");
         }
     }
 

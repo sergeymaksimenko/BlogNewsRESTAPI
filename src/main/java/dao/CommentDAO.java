@@ -63,11 +63,10 @@ public class CommentDAO implements ICommentDAO {
                         public Comment mapRow(ResultSet rs, int rowNum)
                                 throws SQLException {
                             Comment comment = new Comment();
-                            System.out.println(rowNum);
                             comment.setId(rs.getInt("id"));
                             comment.setBody(rs.getString("body"));
                             comment.setDateCreated(rs.getDate("dateCreated"));
-                            comment.setUserCreatorId(rs.getInt("userIdCreator"));
+                            comment.setUserCreatorId(rs.getInt("userCreatorId"));
                             comment.setIdPost(rs.getInt("idPost"));
                             return comment;
                         }
@@ -87,7 +86,6 @@ public class CommentDAO implements ICommentDAO {
                             "'" + comment.getBody() + "'",
                             "'" + comment.getUserCreatorId() + "'", ((comment.getDateCreated() != null) ? "'" + comment.getDateCreated() + "'" : "now()"), "'" + comment.getIdPost() + "'",
                             "'" + id + "'");
-            System.out.println(sqlUpdate);
             templComment.update(sqlUpdate);
             return oldComment;
         } else {
@@ -97,7 +95,12 @@ public class CommentDAO implements ICommentDAO {
 
     @Override
     public boolean removeComment(Integer id) {
-        return false;
+        if (templComment
+                .update("DELETE FROM comment WHERE id = '" + id + "'") > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private Comment getCommentById(Integer id) {
